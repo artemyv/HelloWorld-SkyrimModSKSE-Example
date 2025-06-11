@@ -24,5 +24,12 @@ ColumnLimit: 120
 NamespaceIndentation: All
 IndentPPDirectives: BeforeHash
 FixNamespaceComments: false
-
+DerivePointerAlignment: false
+AlignConsecutiveDeclarations: true
+AlignConsecutiveAssignments: true
+AlignArrayOfStructures: Left
+PointerAlignment: Left
+ReferenceAlignment: Left
+AlignAfterOpenBracket: BlockIndent
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
 ...

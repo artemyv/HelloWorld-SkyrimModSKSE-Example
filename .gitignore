@@ -9,9 +9,8 @@
 .vscode/settings.json
 
 # Possible C++ build output directories and files
-out
+.xmake
 build
-cmake-build*
 *.dll
 *.pdb
 
