@@ -6,7 +6,7 @@
 
 namespace logger = SKSE::log;
 
-void SetupLog() {
+auto SetupLog() {
     auto logsFolder = SKSE::log::log_directory();
     if (!logsFolder) SKSE::stl::report_and_fail("SKSE log_directory not provided, logs disabled.");
     auto pluginName = SKSE::PluginDeclaration::GetSingleton()->GetName();
@@ -16,6 +16,7 @@ void SetupLog() {
     spdlog::set_default_logger(std::move(loggerPtr));
     spdlog::set_level(spdlog::level::info); //vart::todo read log level from ini file
     spdlog::flush_on(spdlog::level::trace);
+    return logFilePath;
 }
 
 // Then just call SetupLog() in your SKSE plugin initialization

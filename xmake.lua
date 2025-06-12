@@ -24,6 +24,6 @@ target("HelloSkyrim")
         version = "0.0.1",
         author = "walkingvart",
         email = "artemyv@gmail.com",
-        mods_folder = os.getenv("SKYRIM_MODS_FOLDER")
+        mods_folder = os.getenv("SKYRIM_MODS_FOLDERS")
     })
 
