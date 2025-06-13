@@ -19,6 +19,7 @@ target("HelloSkyrim")
     -- Precompiled header
     set_pcxxheader("src/PCH.h")
     add_packages("skyrim-commonlib-ng")
+    add_includedirs("../QuickLootIE/include")
     add_rules("@skyrim-commonlib-ng/plugin", {
         name = "Simple Plugin HelloSkyrim NG",
         version = "0.0.1",
