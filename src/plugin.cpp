@@ -2,7 +2,7 @@
 #include "Config/ConfigReader.h"
 #include <format>
 #include <V1/QuickLootAPI.h>
-//#define SUPPORT_QL_API_V2 1
+#define SUPPORT_QL_API_V2 1
 #if SUPPORT_QL_API_V2
 #include <V2/QuickLootAPI.h>
 #endif

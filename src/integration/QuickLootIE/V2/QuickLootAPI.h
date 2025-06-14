@@ -4,6 +4,8 @@
 	Header File for QuickLoot integration
 */
 
+namespace WinAPI = REX::W32;
+
 namespace QuickLoot::API
 {
 	struct ItemStack
@@ -102,8 +104,8 @@ namespace QuickLoot::API
 		{
 			using GetInterfaceProc = InterfaceV20* (*)();
 
-			const auto dllHandle = GetModuleHandleA(SERVER_PLUGIN_NAME);
-			const auto getInterfaceProc = reinterpret_cast<GetInterfaceProc>(GetProcAddress(dllHandle, "GetQuickLootInterfaceV20"));
+			const auto dllHandle = WinAPI::GetModuleHandleA(SERVER_PLUGIN_NAME);
+			const auto getInterfaceProc = reinterpret_cast<GetInterfaceProc>(WinAPI::GetProcAddress(dllHandle, "GetQuickLootInterfaceV20"));
 
 			if (getInterfaceProc) {
 				_plugin = plugin;
