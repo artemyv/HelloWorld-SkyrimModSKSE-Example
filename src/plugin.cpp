@@ -1,9 +1,11 @@
 #include "logger.h"
 #include <format>
-#include <QuickLootAPI.h>
+#include <V1/QuickLootAPI.h>
+#if SUPPORT_QL_API_V2
+#include <V2/QuickLootAPI.h>
+#endif
 
-using logi = SKSE::log::info;
-using loge = SKSE::log::error;
+namespace logger = SKSE::log;
 // Our class which received game events
 //
 // Must have a *public* class inheritance for templated BSTEventSink<EVENT TYPE>
@@ -47,25 +49,39 @@ public:
         auto pluginName = SKSE::PluginDeclaration::GetSingleton()->GetName();
         auto p = EventProcessor::GetSingleton().m_logPath;
         RE::ConsoleLog::GetSingleton()->Print(fmt::format("{} Log is written to {}", pluginName, p).c_str());
-        logi("Info message sent to console");
+        logger::debug("Info message sent to console");
 
         RE::UI::GetSingleton()->AddEventSink(this);
-        logi("Registered to UI events");
+        logger::debug("Registered to UI events");
 
         const auto info = m_skse->GetPluginInfo("QuickLootIE");
         if (info) {
             const auto v =  REL::Version::unpack( info->version);
-            logi("QuickLootIE {:#10x} {} is loaded", info->version, v.string("."));
-            QuickLoot::QuickLootAPI::Init();
-            if (!QuickLoot::QuickLootAPI::IsReady()) {
-                loge("QuickLootAPI is not ready");
-                return;
+            logger::info("QuickLootIE {:#10x} {} is detected", info->version, v.string("."));
+            if(v < REL::Version(4, 0, 0)) {
+                logger::trace("QuickLootIE version uses API V1");
+                QuickLoot::QuickLootAPI::Init();
+                if (!QuickLoot::QuickLootAPI::IsReady()) {
+                    logger::error("QuickLootAPI V1 is not ready");
+                    return;
+                }
+                if (!QuickLoot::QuickLootAPI::RegisterSelectItemHandler(SelectHandlerV1)) {
+                    logger::error("SelectHandler for QuickLootAPI not registered");
+                }
+                logger::info("QuickLootIE API V1 is ready");
             }
-       		if (!QuickLoot::QuickLootAPI::RegisterSelectItemHandler(SelectHandler)) {
-	    		loge("SelectHandler for QuickLootAPI not registered");
+#if SUPPORT_QL_API_V2
+            else {
+                logger::info("QuickLootIE version uses API V2");
+                if (!QuickLoot::API::QuickLootAPI::Init( SKSE::PluginDeclaration::GetSingleton()->GetName().data())) {
+                    logger::error("QuickLootAPI V2 is not ready");
+                    return;
+                }
+                QuickLoot::API::QuickLootAPI::RegisterSelectItemHandler(SelectHandlerV2) ;
             }
+#endif
         } else {
-            loge("QuickLootIE is not loaded");
+            logger::warn("QuickLootIE is not loaded");
         }
 
     }
@@ -74,16 +90,36 @@ public:
     {
         // This is where you can do things when QuickLootIE selects an item.
         // For example, you can log the selected item or perform some action.
-        logi("QuickLootIE selected item in container {} by actor {}", container->GetFormID(), actor->GetFormID());
+        logger::trace("QuickLootIE selected item in container {} by actor {}", container->GetFormID(), actor->GetFormID());
         for (std::uint32_t i = 0; i < elementsCount; ++i) {
             if(elements[i].object)
-                logi("Selected element: {}", elements[i].object->GetObjectTypeName());
+                logger::trace("Selected element: {}", elements[i].object->GetObjectTypeName());
         }
     }
-   	static inline void SelectHandler(QuickLoot::SelectItemEvent* evt)
+
+#if SUPPORT_QL_API_V2
+    void OnQLDoSelect(RE::Actor* actor, RE::TESObjectREFR* container, const QuickLoot::API::ItemStack *stack)
+    {
+        // This is where you can do things when QuickLootIE selects an item.
+        // For example, you can log the selected item or perform some action.
+        logger::trace("QuickLootIE selected item in container {} by actor {}", container->GetFormID(), actor->GetFormID());
+        //Stack contains members
+        //	RE::InventoryEntryData* entry;
+		//  RE::TESObjectREFR* dropRef;
+    }   
+#endif
+
+    static inline void SelectHandlerV1(QuickLoot::SelectItemEvent* evt)
 	{
 		EventProcessor::GetSingleton().OnQLDoSelect(evt->actor, evt->container, evt->elements, evt->elementsCount);
 	};
+
+#if SUPPORT_QL_API_V2
+   	static inline void SelectHandlerV2( QuickLoot::API::Events::SelectItemEvent* evt)
+	{
+		EventProcessor::GetSingleton().OnQLDoSelect(evt->actor, evt->container, evt->stack);
+	};
+#endif    
 
     static void ProcessMessage(SKSE::MessagingInterface::Message* message)
     {
@@ -105,43 +141,43 @@ public:
         */
         case SKSE::MessagingInterface::kPostLoad:
             //"kPostLoad: sent to registered plugins once all plugins have been loaded"
-            logi("--------------------------------[ kPostLoad start/end ]--------------------------------");
+            logger::trace("--------------------------------[ kPostLoad start/end ]--------------------------------");
             break;
         case SKSE::MessagingInterface::kPostPostLoad:
             // kPostPostLoad:  sent right after kPostLoad to facilitate the correct dispatching/registering of messages/listeners
-            logi("--------------------------------[ kPostPostLoad start/end ]--------------------------------");
+            logger::trace("--------------------------------[ kPostPostLoad start/end ]--------------------------------");
             break;
         case SKSE::MessagingInterface::kPreLoadGame:
             // kPreLoadGame:  sent right before the game is loaded
-            logi("--------------------------------[ kPreLoadGame start/end ]--------------------------------");
+            logger::trace("--------------------------------[ kPreLoadGame start/end ]--------------------------------");
             break;
         case SKSE::MessagingInterface::kPostLoadGame:
             // kPostLoadGame:  sent after the game has been loaded
-            logi("--------------------------------[ kPostLoadGame start/end ]--------------------------------");
+            logger::trace("--------------------------------[ kPostLoadGame start/end ]--------------------------------");
             break;
         case SKSE::MessagingInterface::kSaveGame:
             // kSaveGame:  sent when the game is saved
-            logi("--------------------------------[ kSaveGame start/end ]--------------------------------");
+            logger::trace("--------------------------------[ kSaveGame start/end ]--------------------------------");
             break;
         case SKSE::MessagingInterface::kDeleteGame:
             // kDeleteGame:  sent when the game is deleted
-            logi("--------------------------------[ kDeleteGame start/end ]--------------------------------");
+            logger::trace("--------------------------------[ kDeleteGame start/end ]--------------------------------");
             break;
         case SKSE::MessagingInterface::kInputLoaded:
-            logi("--------------------------------[ kInputLoaded start/end ]--------------------------------");
+            logger::trace("--------------------------------[ kInputLoaded start/end ]--------------------------------");
             break;
         case SKSE::MessagingInterface::kNewGame:
             // kNewGame:  sent when a new game is started
-            logi("--------------------------------[ kNewGame start/end ]--------------------------------");
+            logger::trace("--------------------------------[ kNewGame start/end ]--------------------------------");
             break;
         case SKSE::MessagingInterface::kDataLoaded:
             // kDataLoaded: sent after the data handler has loaded all its forms
 
             // This message is sent when the game has finished loading all of the data files.
             // This is a good time to register your papyrus scripts, etc.
-            logi("--------------------------------[ kDataLoaded start ]--------------------------------");
+            logger::info("--------------------------------[ kDataLoaded start ]--------------------------------");
             EventProcessor::GetSingleton().OnDataLoaded();
-			logi("--------------------------------[ kDataLoaded end ]--------------------------------");
+			logger::info("--------------------------------[ kDataLoaded end ]--------------------------------");
             break;
 
         }
@@ -150,7 +186,7 @@ public:
     void OnMenuOpenClose(bool opening, const RE::BSFixedString& menuName)
     {
         if ( menuName == RE::JournalMenu::MENU_NAME) {
-			logi("Journal menu {}", opening ? "opening" : "closing");
+			logger::info("Journal menu {}", opening ? "opening" : "closing");
 		}
     }
     RE::BSEventNotifyControl ProcessEvent(const RE::MenuOpenCloseEvent* event, RE::BSTEventSource<RE::MenuOpenCloseEvent>* eventSource) override

@@ -14,7 +14,7 @@ auto SetupLog() {
     auto fileLoggerPtr = std::make_shared<spdlog::sinks::basic_file_sink_mt>(logFilePath.string(), true);
     auto loggerPtr = std::make_shared<spdlog::logger>("log", std::move(fileLoggerPtr));
     spdlog::set_default_logger(std::move(loggerPtr));
-    spdlog::set_level(spdlog::level::info); //vart::todo read log level from ini file
+    spdlog::set_level(spdlog::level::trace); //vart::todo read log level from ini file
     spdlog::flush_on(spdlog::level::trace);
     return logFilePath;
 }
