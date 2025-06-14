@@ -20,8 +20,8 @@ end
 -- Define the target (shared library for SKSE plugin)
 target("HelloSkyrim")
     set_kind("shared")
-    add_files("src/plugin.cpp", "src/Config/ConfigReader.cpp")
-    add_headerfiles("src/PCH.h", "src/logger.h", "src/Config/ConfigReader.h")
+    add_files("src/plugin.cpp", "src/EventProcessor.cpp","src/Config/ConfigReader.cpp")
+    add_headerfiles("src/PCH.h", "src/EventProcessor.h", "src/logger.h", "src/Config/ConfigReader.h")
     -- Precompiled header
     set_pcxxheader("src/PCH.h")
     add_packages("skyrim-commonlib-ng", "nlohmann_json")
