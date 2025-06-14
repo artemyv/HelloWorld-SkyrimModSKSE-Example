@@ -16,41 +16,37 @@ And will show several game events.
 If available - it will try to register to QuickLootIE Select event using API V1 
 (mod version upto 3.4.1 supported)
 For some elements even the item type name is printed to log
+Version 0.0.2 will read desired log level from json config, by default info 
+level is used
 
 ```
-[2025-06-14 09:41:48.709] [log] [info] [plugin.cpp:213] Plugin loaded
-[2025-06-14 09:41:50.811] [log] [trace] [plugin.cpp:144] --------------------------------[ kPostLoad start/end ]--------------------------------
-[2025-06-14 09:41:55.970] [log] [trace] [plugin.cpp:148] --------------------------------[ kPostPostLoad start/end ]--------------------------------
-[2025-06-14 09:42:40.431] [log] [trace] [plugin.cpp:167] --------------------------------[ kInputLoaded start/end ]--------------------------------
-[2025-06-14 09:43:35.925] [log] [info] [plugin.cpp:178] --------------------------------[ kDataLoaded start ]--------------------------------
-[2025-06-14 09:43:35.925] [log] [debug] [plugin.cpp:52] Info message sent to console
-[2025-06-14 09:43:35.925] [log] [debug] [plugin.cpp:55] Registered to UI events
-[2025-06-14 09:43:35.925] [log] [info] [plugin.cpp:60] QuickLootIE  0x3040000 3.4.0.0 is detected
-[2025-06-14 09:43:35.925] [log] [trace] [plugin.cpp:62] QuickLootIE version uses API V1
-[2025-06-14 09:43:35.925] [log] [info] [RequestClient.h:49] Successfully connected to plugin QuickLootIE (client version 1.0, server version 1.0)
-[2025-06-14 09:43:35.925] [log] [info] [plugin.cpp:71] QuickLootIE API V1 is ready
-[2025-06-14 09:43:35.925] [log] [info] [plugin.cpp:180] --------------------------------[ kDataLoaded end ]--------------------------------
-[2025-06-14 09:44:34.974] [log] [trace] [plugin.cpp:152] --------------------------------[ kPreLoadGame start/end ]--------------------------------
-[2025-06-14 09:44:57.131] [log] [trace] [plugin.cpp:156] --------------------------------[ kPostLoadGame start/end ]--------------------------------
-[2025-06-14 09:45:00.222] [log] [trace] [plugin.cpp:93] QuickLootIE selected item in container 571732 by actor 20
-[2025-06-14 09:45:00.222] [log] [trace] [plugin.cpp:96] Selected element: TwoHandAxe
-[2025-06-14 09:45:22.696] [log] [trace] [plugin.cpp:93] QuickLootIE selected item in container 571732 by actor 20
-[2025-06-14 09:45:22.696] [log] [trace] [plugin.cpp:96] Selected element: 
-[2025-06-14 09:45:25.514] [log] [trace] [plugin.cpp:93] QuickLootIE selected item in container 571732 by actor 20
-[2025-06-14 09:45:25.514] [log] [trace] [plugin.cpp:96] Selected element: TwoHandAxe
-[2025-06-14 09:45:25.514] [log] [trace] [plugin.cpp:93] QuickLootIE selected item in container 571732 by actor 20
-[2025-06-14 09:45:25.514] [log] [trace] [plugin.cpp:96] Selected element: 
-[2025-06-14 09:45:26.539] [log] [trace] [plugin.cpp:93] QuickLootIE selected item in container 571732 by actor 20
-[2025-06-14 09:45:26.539] [log] [trace] [plugin.cpp:96] Selected element: TwoHandAxe
-[2025-06-14 09:45:26.539] [log] [trace] [plugin.cpp:93] QuickLootIE selected item in container 571732 by actor 20
-[2025-06-14 09:45:26.539] [log] [trace] [plugin.cpp:96] Selected element: 
-[2025-06-14 09:45:34.135] [log] [trace] [plugin.cpp:93] QuickLootIE selected item in container 571732 by actor 20
-[2025-06-14 09:45:34.135] [log] [trace] [plugin.cpp:96] Selected element: TwoHandAxe
-[2025-06-14 09:45:34.135] [log] [trace] [plugin.cpp:93] QuickLootIE selected item in container 571732 by actor 20
-[2025-06-14 09:45:34.135] [log] [trace] [plugin.cpp:96] Selected element: 
-[2025-06-14 09:45:35.541] [log] [trace] [plugin.cpp:93] QuickLootIE selected item in container 571732 by actor 20
-[2025-06-14 09:45:35.541] [log] [trace] [plugin.cpp:96] Selected element: TwoHandAxe
-[2025-06-14 09:45:38.660] [log] [info] [plugin.cpp:189] Journal menu opening```
+[2025-06-14 13:26:04.533] [log] [info] [plugin.cpp:214] Plugin initialization started
+[2025-06-14 13:26:04.539] [log] [info] [ConfigReader.cpp:34] Log level changed to trace
+[2025-06-14 13:26:06.043] [log] [trace] [plugin.cpp:147] --------------------------------[ kPostLoad start/end ]--------------------------------
+[2025-06-14 13:26:10.622] [log] [trace] [plugin.cpp:151] --------------------------------[ kPostPostLoad start/end ]--------------------------------
+[2025-06-14 13:26:53.478] [log] [trace] [plugin.cpp:170] --------------------------------[ kInputLoaded start/end ]--------------------------------
+[2025-06-14 13:27:45.965] [log] [info] [plugin.cpp:181] --------------------------------[ kDataLoaded start ]--------------------------------
+[2025-06-14 13:27:45.974] [log] [debug] [plugin.cpp:55] Info message sent to console
+[2025-06-14 13:27:45.974] [log] [debug] [plugin.cpp:58] Registered to UI events
+[2025-06-14 13:27:45.974] [log] [info] [plugin.cpp:63] QuickLootIE  0x3040000 3.4.0.0 is detected
+[2025-06-14 13:27:45.974] [log] [trace] [plugin.cpp:65] QuickLootIE version uses API V1
+[2025-06-14 13:27:45.974] [log] [info] [RequestClient.h:49] Successfully connected to plugin QuickLootIE (client version 1.0, server version 1.0)
+[2025-06-14 13:27:45.974] [log] [info] [plugin.cpp:74] QuickLootIE API V1 is ready
+[2025-06-14 13:27:45.974] [log] [info] [plugin.cpp:183] --------------------------------[ kDataLoaded end ]--------------------------------
+[2025-06-14 13:28:33.661] [log] [trace] [plugin.cpp:155] --------------------------------[ kPreLoadGame start/end ]--------------------------------
+[2025-06-14 13:28:43.938] [log] [trace] [plugin.cpp:159] --------------------------------[ kPostLoadGame start/end ]--------------------------------
+[2025-06-14 13:28:46.739] [log] [trace] [plugin.cpp:96] QuickLootIE selected item in container 571732 by actor 20
+[2025-06-14 13:28:46.739] [log] [trace] [plugin.cpp:99] Selected element: TwoHandAxe
+[2025-06-14 13:28:57.914] [log] [trace] [plugin.cpp:96] QuickLootIE selected item in container 571732 by actor 20
+[2025-06-14 13:28:57.914] [log] [trace] [plugin.cpp:99] Selected element: 
+[2025-06-14 13:29:00.689] [log] [trace] [plugin.cpp:96] QuickLootIE selected item in container 571732 by actor 20
+[2025-06-14 13:29:00.689] [log] [trace] [plugin.cpp:99] Selected element: TwoHandAxe
+[2025-06-14 13:29:00.689] [log] [trace] [plugin.cpp:96] QuickLootIE selected item in container 571732 by actor 20
+[2025-06-14 13:29:00.690] [log] [trace] [plugin.cpp:99] Selected element: 
+[2025-06-14 13:29:01.696] [log] [trace] [plugin.cpp:96] QuickLootIE selected item in container 571732 by actor 20
+[2025-06-14 13:29:01.696] [log] [trace] [plugin.cpp:99] Selected element: TwoHandAxe
+[2025-06-14 13:29:03.022] [log] [info] [plugin.cpp:192] Journal menu opening
+```
 
 # CommonLibSSE NG
 

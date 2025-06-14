@@ -1,11 +1,14 @@
 #include "logger.h"
+#include "Config/ConfigReader.h"
 #include <format>
 #include <V1/QuickLootAPI.h>
+//#define SUPPORT_QL_API_V2 1
 #if SUPPORT_QL_API_V2
 #include <V2/QuickLootAPI.h>
 #endif
 
-namespace logger = SKSE::log;
+
+namespace HelloSkyrim {
 // Our class which received game events
 //
 // Must have a *public* class inheritance for templated BSTEventSink<EVENT TYPE>
@@ -202,19 +205,21 @@ private:
     std::string m_logPath;
     const SKSE::LoadInterface *m_skse = nullptr;
 };
-
+}
 SKSEPluginLoad(const SKSE::LoadInterface *skse) {
     SKSE::Init(skse);
 
-    EventProcessor::GetSingleton().setLoadInterface(skse);
     // Setup logging (e.g. using spdlog)
-    auto path = SetupLog();
-    EventProcessor::GetSingleton().setLogPath(path.string());
-    SKSE::log::info("Plugin loaded");
+    auto path = HelloSkyrim::SetupLog();
+    SKSE::log::info("Plugin initialization started");
+
+    HelloSkyrim::Config::ConfigReader::SetUp();
+    HelloSkyrim::EventProcessor::GetSingleton().setLoadInterface(skse);
+    HelloSkyrim::EventProcessor::GetSingleton().setLogPath(path.string());
 
     // This example prints "Hello, world!" to the Skyrim ~ console.
     // To view it, open the ~ console from the Skyrim Main Menu.
-    SKSE::GetMessagingInterface()->RegisterListener(&EventProcessor::ProcessMessage);
+    SKSE::GetMessagingInterface()->RegisterListener(&HelloSkyrim::EventProcessor::ProcessMessage);
 
     return true;
 }
