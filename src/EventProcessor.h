@@ -76,6 +76,7 @@ namespace HelloSkyrim {
 
         // This function is called when the Journal menu is opened or closed
         void OnMenuOpenClose(bool opening, const RE::BSFixedString& menuName);
+        void ShowWeaponInfo(RE::TESObjectWEAP* weapon);
 
     private:
         std::string                m_logPath;

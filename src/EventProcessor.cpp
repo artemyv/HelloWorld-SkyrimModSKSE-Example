@@ -1,6 +1,5 @@
 ﻿#include "EventProcessor.h"
 
-
 #include <format>
 
 #include "Config/ConfigReader.h"
@@ -120,6 +119,13 @@ void HelloSkyrim::EventProcessor::OnDataLoaded() {
     }
 }
 
+void HelloSkyrim::EventProcessor::ShowWeaponInfo(RE::TESObjectWEAP* weapon) {
+   
+    auto type = weapon->weaponData.animationType.get();
+    logger::info("Weapon type: {} ",  weapon->GetObjectTypeName());
+    // You can add more detailed information about the weapon here
+}
+
 void HelloSkyrim::EventProcessor::OnQLDoSelect(
     RE::Actor* actor, RE::TESObjectREFR* container, const QuickLoot::Element* elements, std::uint32_t elementsCount
 ) {
@@ -127,7 +133,19 @@ void HelloSkyrim::EventProcessor::OnQLDoSelect(
     // For example, you can log the selected item or perform some action.
     logger::trace("QuickLootIE selected item in container {} by actor {}", container->GetFormID(), actor->GetFormID());
     for (std::uint32_t i = 0; i < elementsCount; ++i) {
-        if (elements[i].object) logger::trace("Selected element: {}", elements[i].object->GetObjectTypeName());
+        const auto object = elements[i].object;
+        if (object) {
+            const auto type = object->GetFormType();
+            logger::trace("Selected element: {} of type {}", object->GetObjectTypeName(), FormTypeToString(type));
+            //Weapon,                      //	29 WEAP	TESObjectWEAP
+            if (type == RE::FormType::Weapon) {
+                // Handle weapon selection
+                auto weapon = object->As<RE::TESObjectWEAP>();
+                if (weapon) {
+                    ShowWeaponInfo(weapon);
+                }
+            }
+        }
     }
 }
 
